@@ -11,9 +11,11 @@ const bcrypt = require("bcryptjs");
 exports.signup = (req, res) => {
     // Save User to Database
     User.create({
-        username: req.body.username,
+        firstName: req.body.firstName,
+        lastName: req.body.lastName,
         email: req.body.email,
-        password: bcrypt.hashSync(req.body.password, 8)
+        password: bcrypt.hashSync(req.body.password, 8),
+        telephone: req.body.telephone
     })
         .then(user => {
             if (req.body.roles) {
@@ -43,12 +45,12 @@ exports.signup = (req, res) => {
 exports.signin = (req, res) => {
     User.findOne({
         where: {
-            username: req.body.username
+            email: req.body.email
         }
     })
         .then(user => {
             if (!user) {
-                return res.status(404).send({ message: "User Not found." });
+                return res.status(404).send({ message: "Wrong Credentials" });
             }
 
             const passwordIsValid = bcrypt.compareSync(
@@ -59,7 +61,7 @@ exports.signin = (req, res) => {
             if (!passwordIsValid) {
                 return res.status(401).send({
                     accessToken: null,
-                    message: "Invalid Password!"
+                    message: "Wrong Credentials"
                 });
             }
 
@@ -74,7 +76,8 @@ exports.signin = (req, res) => {
                 }
                 res.status(200).send({
                     id: user.id,
-                    username: user.username,
+                    firstName: user.firstName,
+                    lastName: user.lastName,
                     email: user.email,
                     roles: authorities,
                     accessToken: token

@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 
 //routes
 require('./app/routes/auth.routes')(app)
-require('./app/routes/user.routes')(app)
+// require('./app/routes/user.routes')
 
 //set port & listen
 
@@ -36,19 +36,19 @@ const db = require('./app/models')
 const Role = db.role
 
 function init(){
-    Role.create({
+    Role.findOrCreate({where:{
         id:1,
         name:'user'
-    });
+    }});
 
-    Role.create({
+    Role.findOrCreate({where:{
         id:2,
         name:'moderator'
-    });
-    Role.create({
+    }});
+    Role.findOrCreate({where:{
         id:3,
         name:'admin'
-    })
+    }})
 }
 
 
