@@ -1,7 +1,7 @@
 const express = require('express')
 const cors = require('cors')
 const corsOption = {
-    origin:'http://localhost:8081'
+    origin:'http://localhost:3000'
 }
 
 const app = express()
@@ -21,7 +21,7 @@ app.get('/', (req, res) => {
 
 //routes
 require('./app/routes/auth.routes')(app)
-// require('./app/routes/user.routes')
+require('./app/routes/user.routes')(app)
 
 //set port & listen
 
